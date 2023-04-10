@@ -1,32 +1,15 @@
-/*
-*   Author: Arbaaz Meghani
-*   Description: This class stores constants.
- */
-
-//package
 package edu.uic.srikanth.cs478.myapplication;
 
-//final class
 public final class Constants {
 
-    //private constructor to prevent instantiation
     private Constants() {
-
     }
-
-    //constant variables
-
-    //game board spot information
-    public static final int PLAYER_A_ID = 1;
-    public static final int PLAYER_B_ID = 2;
     public static final int EMPTY = 0;
-
-    //game board information
-    public static final int NUM_PIECES = 3;
+    public static final int TOTAL_MOVES = 3;
     public static final int WIDTH = 3;
     public static final int HEIGHT = 3;
-
-    //handler message what constant
-    public static final int MADE_MOVE = 0;
+    public static final int MOVE_COMPLETED = 0;
+    public static final int PLAYER_One_ID = 1;
+    public static final int PLAYER_Two_ID = 2;
 
 }
