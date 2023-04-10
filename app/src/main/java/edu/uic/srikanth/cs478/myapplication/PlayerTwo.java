@@ -11,7 +11,7 @@ public class PlayerTwo implements Runnable {
 
     //instance variables
     private int numPieces = 0;
-    private PositionData[] pieces = null;
+    private MoveData[] pieces = null;
     public static Handler playerTwoHandler;
 
     //keep track of rows
@@ -42,7 +42,7 @@ public class PlayerTwo implements Runnable {
             public void handleMessage(Message msg) {
                 switch(msg.what) {
                     case Constants.MOVE_COMPLETED:
-                        updateMatrix(new PositionData(msg.arg1, msg.arg2, Constants.PLAYER_One_ID), (PositionData)msg.obj);
+                        updateMatrix(new MoveData(msg.arg1, msg.arg2, Constants.PLAYER_One_ID), (MoveData)msg.obj);
                         makeMove();
                         break;
                     default: break;
@@ -54,7 +54,7 @@ public class PlayerTwo implements Runnable {
     private void makeMove() {
         if(numPieces < 3) {
             if(pieces == null)
-                pieces = new PositionData[Constants.TOTAL_MOVES];
+                pieces = new MoveData[Constants.TOTAL_MOVES];
             placePiece();
             return;
         }
@@ -63,7 +63,7 @@ public class PlayerTwo implements Runnable {
         // get position by ReverseRowMajorTMMStrategy
         int[] pos = ReverseRowMajorStrategy();
         Log.i("PlayerTwo", pos[0] +String.valueOf(pos[1]));
-        PositionData newPosition = new PositionData(pos[0], pos[1], Constants.PLAYER_Two_ID);
+        MoveData newPosition = new MoveData(pos[0], pos[1], Constants.PLAYER_Two_ID);
         updateMatrix(pieces[pieceNumber], newPosition);
         Game.movePiece(pieces[pieceNumber], newPosition);
     }
@@ -82,11 +82,11 @@ public class PlayerTwo implements Runnable {
     }
     private void placePiece() {
         pieces[numPieces] = getRandomPoint();
-        Game.movePiece(new PositionData(-1,-1,Constants.PLAYER_Two_ID), pieces[numPieces]);
-        updateMatrix(new PositionData(-1,-1,Constants.PLAYER_Two_ID), pieces[numPieces]);
+        Game.movePiece(new MoveData(-1,-1,Constants.PLAYER_Two_ID), pieces[numPieces]);
+        updateMatrix(new MoveData(-1,-1,Constants.PLAYER_Two_ID), pieces[numPieces]);
         numPieces++;
     }
-    private void updateMatrix(PositionData oldPos, PositionData newPos) {
+    private void updateMatrix(MoveData oldPos, MoveData newPos) {
         if(newPos == null)
             return;
         int oldX = oldPos.getPosX();
@@ -100,7 +100,7 @@ public class PlayerTwo implements Runnable {
         else
             gameMatrix[newX][newY] = -1;
     }
-    private PositionData getRandomPoint() {
+    private MoveData getRandomPoint() {
         int[] move = new int[2];
         Random random = new Random();
         do {
@@ -108,7 +108,7 @@ public class PlayerTwo implements Runnable {
             move[1] = random.nextInt(3);
         } while (!isMoveValid(move[0], move[1]));
         Log.i("PlayerTwo", move[0] +String.valueOf(move[1]));
-        return new PositionData(move[0], move[1], Constants.PLAYER_Two_ID);
+        return new MoveData(move[0], move[1], Constants.PLAYER_Two_ID);
     }
     public boolean isMoveValid(int row, int col) {
         return (row >= 0 && row < 3 && col >= 0 && col < 3 && Game.getGameBoard()[row][col] == 0);

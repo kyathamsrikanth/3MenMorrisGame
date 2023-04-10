@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private static TextView[][] gameBoard;
     private static Thread playerOneThread;
     private static Thread playerTwoThread;
+    private TextView resultView;
 
     private Game game;
 
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                 case Constants.MOVE_COMPLETED:
                     int oldX = msg.arg1;
                     int oldY = msg.arg2;
-                    PositionData newPosition = (PositionData)msg.obj;
+                    MoveData newPosition = (MoveData)msg.obj;
                     if(oldX != -1)
                         gameBoard[oldX][oldY].setAlpha(0.0f);
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     int newX = newPosition.getPosX();
                     int newY = newPosition.getPosY();
 
-                    Log.i("main", String.valueOf(newPosition.getPlayerId()));
+                    Log.i("Main", String.valueOf(newPosition.getPlayerId()));
 
                     //place piece
                     if(newPosition.getPlayerId() == Constants.PLAYER_One_ID)
@@ -50,13 +51,19 @@ public class MainActivity extends AppCompatActivity {
                     //check if Game id Over
                     int id = game.isGameOver();
 
+                    Log.i("Main", String.valueOf("isGameOver" + id));
+
                     // If Game is over Check for Win and send Toast Message
                     if(id != -1) {
                         closeThreads();
-                        if(id == Constants.PLAYER_One_ID)
+                        if(id == Constants.PLAYER_One_ID) {
                             Toast.makeText(MainActivity.this, "X is the Winner!!", Toast.LENGTH_LONG).show();
-                        else
+                            updateResultView("Result : Player X Won");
+                        }
+                        else {
                             Toast.makeText(MainActivity.this, "O is the Winner!!", Toast.LENGTH_LONG).show();
+                            updateResultView("Result : Player O Won");
+                        }
                         return;
                     }
                     // Check for the Player and trigger respective handler
@@ -79,21 +86,27 @@ public class MainActivity extends AppCompatActivity {
         playerTwoThread = null;
         //initialize the  Image Views
         gameBoard = new TextView[Constants.WIDTH][Constants.HEIGHT];
-        gameBoard[0][0] = (TextView)findViewById(R.id.colA1);
-        gameBoard[0][1] = (TextView)findViewById(R.id.colA2);
-        gameBoard[0][2] = (TextView)findViewById(R.id.colA3);
-        gameBoard[1][0] = (TextView)findViewById(R.id.colB1);
-        gameBoard[1][1] = (TextView)findViewById(R.id.colB2);
-        gameBoard[1][2] = (TextView)findViewById(R.id.colB3);
-        gameBoard[2][0] = (TextView)findViewById(R.id.colC1);
-        gameBoard[2][1] = (TextView)findViewById(R.id.colC2);
-        gameBoard[2][2] = (TextView)findViewById(R.id.colC3);
+        gameBoard[0][0] = findViewById(R.id.colA1);
+        gameBoard[0][1] = findViewById(R.id.colA2);
+        gameBoard[0][2] = findViewById(R.id.colA3);
+        gameBoard[1][0] = findViewById(R.id.colB1);
+        gameBoard[1][1] = findViewById(R.id.colB2);
+        gameBoard[1][2] = findViewById(R.id.colB3);
+        gameBoard[2][0] = findViewById(R.id.colC1);
+        gameBoard[2][1] = findViewById(R.id.colC2);
+        gameBoard[2][2] = findViewById(R.id.colC3);
+        resultView = findViewById(R.id.result_view);
+    }
+
+    public void updateResultView(String result) {
+        resultView.setText(result);
     }
     public void onStartGameClicked(View view) {
         if(playerOneThread != null)
             closeThreads();
         game = new Game(mainHandler);
         // Start Threads
+        updateResultView("");
         startThreads();
         // Clear Previous Game
         clearGame();

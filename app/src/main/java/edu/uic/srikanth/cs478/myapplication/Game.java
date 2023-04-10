@@ -47,7 +47,7 @@ public class Game {
             for(int j = 0; j < Constants.HEIGHT; j++)
                 gameBoard[i][j] = Constants.EMPTY;
     }
-    public synchronized static void movePiece(PositionData oldPosition, PositionData newPosition) {
+    public synchronized static void movePiece(MoveData oldPosition, MoveData newPosition) {
         // Wait for 2 sec so that user can move
         try{
             Thread.sleep(2000);

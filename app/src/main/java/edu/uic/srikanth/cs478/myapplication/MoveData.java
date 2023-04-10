@@ -1,11 +1,11 @@
 package edu.uic.srikanth.cs478.myapplication;
 
-public class PositionData {
+public class MoveData {
 
     private int posX;
     private int playerId;
 
-    public PositionData(int posX, int posY, int playerId) {
+    public MoveData(int posX, int posY, int playerId) {
         this.posX = posX;
         this.posY = posY;
         this.playerId = playerId;
